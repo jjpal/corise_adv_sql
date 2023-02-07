@@ -1,5 +1,5 @@
 --
--- Week 1 Homework project
+-- Week 1 Project Assignment (write query)
 -- Exercise 1
 -- clean up cities if mutilple city/st combination selct 1 unique per partition to remove duplicates
 with cs_cities as (
