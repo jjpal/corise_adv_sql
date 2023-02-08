@@ -1,5 +1,9 @@
+/*  Week 2 Project Assignment (refactor query) 
+    Followed Brooklyn Data Company style guide
+    moved the subquery and two joins into separate CTEs */
 
 with 
+/* count customer food preferences */
    fd_pref_c as (
      select 
       customer_id
@@ -8,12 +12,14 @@ with
      where is_active = true
      group by 1
    )
+/* select information from supported city Chicago Illinois */
    , chic_loc as (
    select 
        geo_location
    from vk_data.resources.us_cities 
    where city_name = 'CHICAGO' and state_abbr = 'IL' 
    )    
+   /* select information from supported city Gary Indiana */
    , gary_loc as (
    select 
        geo_location
