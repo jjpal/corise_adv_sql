@@ -1,9 +1,9 @@
 /*  Week 2 Project Assignment (refactor query) 
-    Followed Brooklyn Data Company style guide
-    moved the subquery and two joins into separate CTEs */
+    Mostly followed the Brooklyn Data Company style guide
+    moved the subquery and two joins into separate CTEs and replaced ilike with ilike any */
 
-with 
 /* count customer food preferences */
+with 
    fd_pref_c as (
      select 
       customer_id
@@ -12,13 +12,15 @@ with
      where is_active = true
      group by 1
    )
-/* select information from supported city Chicago Illinois */
+
+   /* select information from supported city Chicago Illinois */
    , chic_loc as (
    select 
        geo_location
    from vk_data.resources.us_cities 
    where city_name = 'CHICAGO' and state_abbr = 'IL' 
    )    
+
    /* select information from supported city Gary Indiana */
    , gary_loc as (
    select 
@@ -42,10 +44,7 @@ inner join fd_pref_c on cd.customer_id = fd_pref_c.customer_id
 cross join chic_loc
 cross join gary_loc
 where 
-    ((trim(city_name) ilike '%concord%' or trim(city_name) ilike '%georgetown%' or trim(city_name) ilike '%ashland%')
-    and customer_state = 'KY')
-    or
-    (customer_state = 'CA' and (trim(city_name) ilike '%oakland%' or trim(city_name) ilike '%pleasant hill%'))
-    or
-    (customer_state = 'TX' and (trim(city_name) ilike '%arlington%') or trim(city_name) ilike '%brownsville%')
-    
+   trim(city_name) ilike any ('%concord%', '%georgetown%', '%ashland%') and customer_state = 'KY'
+   or trim(city_name) ilike any ('%oakland%', '%pleasant hill%') and customer_state = 'CA'
+   or trim(city_name) ilike any ('%arlington%', '%brownsville%') and customer_state = 'TX'
+
