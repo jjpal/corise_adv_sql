@@ -15,7 +15,8 @@ with event_sessions as (
         , session_id
         , event_timestamp
         , trim(parse_json(event_details):"recipe_id", '"') as recipe_id
-        , trim(parse_json(event_details):"search_tag", '"') as event_type
+        , trim(parse_json(event_details):"event", '"') as event_type
+ 
     from vk_data.events.website_activity
     qualify row_number() over(partition by event_id, recipe_id order by session_id) = 1
 )
