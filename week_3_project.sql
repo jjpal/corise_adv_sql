@@ -62,7 +62,7 @@ with event_sessions as (
 )
 
 select * from final_output
-order by 2
+order by 1
 
 
 
