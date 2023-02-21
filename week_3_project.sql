@@ -1,6 +1,4 @@
 
---select * from vk_data.events.website_activity
-
 /* We want to create a report by day to track:
 [1] total unique sessions 
 [2] the average length of sessions in seconds 
@@ -15,8 +13,7 @@ with event_sessions as (
         , session_id
         , event_timestamp
         , trim(parse_json(event_details):"recipe_id", '"') as recipe_id
-        , trim(parse_json(event_details):"event", '"') as event_type
- 
+        , trim(parse_json(event_details):"event", '"') as event_type 
     from vk_data.events.website_activity
     qualify row_number() over(partition by event_id, recipe_id order by session_id) = 1
 )
@@ -35,13 +32,12 @@ with event_sessions as (
     from event_sessions
     group by session_id
 )
-/* event_date, recipe_id, and count of total_views searched for recipe_id's
- filtering out null values */
+/* event_date, recipe_id, and count of total_views searched for recipe_id's filtering out null values */
 , most_viewed_recipe as (
     select 
         date(event_timestamp) as event_date
         , recipe_id
-        , count(*) as total_recipe_views
+        , count(1) as total_recipe_views
     from event_sessions
     where recipe_id is not null
     group by event_date, recipe_id
@@ -53,7 +49,7 @@ with event_sessions as (
         date(session_begin) as event_day
         , count(session_id) as total_sessions
         , round(avg(session_length)) as avg_session_length_sec
-        , max(searches_per_recipe_view) as avg_searches_per_recipe_view
+        , avg(searches_per_recipe_view) as avg_searches_per_recipe_view
         , max(recipe_name) as top_recipe
     from grouped_session_time
     inner join most_viewed_recipe on date(grouped_session_time.session_begin) = most_viewed_recipe.event_date
