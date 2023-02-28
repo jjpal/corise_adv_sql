@@ -1,4 +1,6 @@
-/* Develop a report to analyze automobile customers who have placed urgent orders. 
+/*
+Part 1
+Develop a report to analyze automobile customers who have placed urgent orders. 
 The output should be sorted by last_order_date descending limit 100 rows. */ 
 
 /* Filter the data */
@@ -71,3 +73,17 @@ from prep_all_parts
 group by 1, 2, 3, 4
 order by last_order_date desc, total_spent desc
 limit 100
+
+/* Part 2
+Review the candidate's tech exercise below, and provide a one-paragraph assessment of the SQL quality. 
+Provide examples/suggestions for improvement if you think the candidate could have chosen a better approach.
+
+Do you agree with the results returned by the query? 
+   yes
+   
+Is it easy to understand? 
+   It is understandable, but it might take some time to debug. Having CTEs to break down the make it easier to debug
+
+Could the code be more efficient?
+   Having less joins, more CTEs, using qualify to remove duplicates, and using order by until the final query.
+*/
