@@ -1,1 +1,1 @@
-# corise_adv_sql
+# CoRise Advanced SQL
