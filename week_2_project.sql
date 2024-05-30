@@ -3,11 +3,10 @@
     moved the subquery and two joins into separate CTEs and replaced ilike with ilike any */
 
 /* count customer food preferences */
-with 
-   fd_pref_c as (
+with fd_pref_c as (
      select 
-      customer_id
-      , count(*) as food_pref_count
+        customer_id
+        , count(*) as food_pref_count
      from vk_data.customers.customer_survey
      where is_active = true
      group by 1
