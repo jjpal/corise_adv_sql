@@ -19,10 +19,10 @@ with priority_orders as (
 
 , top_orders as (
     select
-    	c_custkey,
-        max(o_orderdate) as last_order_date,
-        listagg(o_orderkey, ', ') as order_numbers,
-        sum(o_totalprice) as total_spent
+    	c_custkey
+        , max(o_orderdate) as last_order_date
+        , listagg(o_orderkey, ', ') as order_numbers
+        , sum(o_totalprice) as total_spent
     from priority_orders
     where order_price_rank <= 3
     group by 1
@@ -56,19 +56,19 @@ with priority_orders as (
 )
 
 select 
-	c_custkey,
-    last_order_date,
-    order_numbers,
-    total_spent,
-    max(case when part_rank = 1 then l_partkey end) as part_1_key,
-    max(case when part_rank = 1 then ordered_quantity end) as part_1_quantity,
-    max(case when part_rank = 1 then part_total_spent end) as part_1_total_spent,
-    max(case when part_rank = 2 then l_partkey end) as part_2_key,
-    max(case when part_rank = 2 then ordered_quantity end) as part_2_quantity,
-    max(case when part_rank = 2 then part_total_spent end) as part_2_total_spent,
-    max(case when part_rank = 3 then l_partkey end) as part_3_key,
-    max(case when part_rank = 3 then ordered_quantity end) as part_3_quantity,
-    max(case when part_rank = 3 then part_total_spent end) as part_3_total_spent
+    c_custkey
+    , last_order_date
+    , order_numbers
+    , total_spent
+    , max(case when part_rank = 1 then l_partkey end) as part_1_key
+    , max(case when part_rank = 1 then ordered_quantity end) as part_1_quantity
+    , max(case when part_rank = 1 then part_total_spent end) as part_1_total_spent
+    , max(case when part_rank = 2 then l_partkey end) as part_2_key
+    , max(case when part_rank = 2 then ordered_quantity end) as part_2_quantity
+    , max(case when part_rank = 2 then part_total_spent end) as part_2_total_spent
+    , max(case when part_rank = 3 then l_partkey end) as part_3_key
+    , max(case when part_rank = 3 then ordered_quantity end) as part_3_quantity
+    , max(case when part_rank = 3 then part_total_spent end) as part_3_total_spent
 from prep_all_parts
 group by 1, 2, 3, 4
 order by last_order_date desc, total_spent desc
